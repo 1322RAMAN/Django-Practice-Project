@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Title Details</title>
+    </head>
+    <body>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Content 2</th>
+                    <th>Published Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for row in articles %}
+                        <td>{{ row.title }}</td>
+                        <td>{{ row.content }}</td>
+                        <td>{{ row.pub_date }}</td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        
+    </body>
+</html>

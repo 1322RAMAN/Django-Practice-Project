@@ -1,0 +1,12 @@
+<h2>Login</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
+
+{% for message in messages %}
+    <p style="color: {% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}black{% endif %};">
+        {{ message }}
+    </p>
+{% endfor %}

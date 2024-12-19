@@ -1,0 +1,19 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <!-- Pass the 'next' parameter as a hidden input field -->
+    <!-- <input type="hidden" name="next" value="{{ next }}"> -->
+
+    <!-- Include 'next' as a hidden field if available -->
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}">
+    {% endif %}
+    
+    <button type="submit">Log In</button>
+</form>
+
+{% for message in messages %}
+    <p style="{% if 'success' in message.tags %}color: green;{% elif 'error' in message.tags %}color: red;{% else %}color: black;{% endif %}">
+        {{ message }}
+    </p>
+{% endfor %}

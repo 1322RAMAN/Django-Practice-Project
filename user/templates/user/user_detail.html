@@ -1,0 +1,14 @@
+<h1>User Details</h1>
+
+<p> First Name = {{ user.first_name }} </p>
+<p> Last Name = {{ user.last_name }} </p>
+<p> Email = {{ user.email }} </p>
+<p> Is Superuser = {{ user.is_superuser }} </p>
+<p> Is Active = {{ user.is_active }} </p>
+<p> Is Staff = {{ user.is_staff }} </p>
+
+{% if user.is_superuser != true %}
+    <a href="{% url 'make_superuser' %}">
+        <button type="submit">Make Superuser</button>
+    </a>
+{% endif %}

@@ -1,0 +1,13 @@
+<!-- create_superuser.html -->
+<h2>Create a Superuser</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Superuser</button>
+</form>
+
+{% for message in messages %}
+    <p style="{% if 'success' in message.tags %}color: green;{% elif 'error' in message.tags %}color: red;{% else %}color: black;{% endif %}">
+        {{ message }}
+    </p>
+{% endfor %}

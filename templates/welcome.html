@@ -1,0 +1,20 @@
+<!-- welcome.html -->
+
+{% for message in messages %}
+<p style="{% if 'success' in message.tags %}color: green;{% elif 'error' in message.tags %}color: red;{% else %}color: black;{% endif %}">
+    {{ message }}
+</p>
+{% endfor %}
+
+<h1>Welcome, {{ user.username }}</h1>
+
+<!-- Check if the user is a superuser -->
+{% if user.is_superuser %}
+    <a href="{% url 'make_superuser' user.username %}">
+        <button>Create Superuser</button>
+    </a>
+{% endif %}
+
+<a href="{% url 'logout_user' %}">
+    <button>Logout</button>
+</a>

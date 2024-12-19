@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Blog</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Optional for styling -->
+</head>
+<body>
+    <h1>Edit Blog</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" value="{{ blog.title }}" required><br><br>
+
+        <label for="content">Content:</label><br>
+        <textarea id="content" name="content" rows="10" cols="50" required>{{ blog.content }}</textarea><br><br>
+
+        <label for="is_published">Published:</label>
+        <input type="checkbox" id="is_published" name="is_published" {% if blog.is_published %}checked{% endif %}><br><br>
+
+        <button type="submit">Update Blog</button>
+    </form>
+
+    <a href="{% url 'blog_list' %}">Back to Blog List</a> <!-- Update this to match your URL name -->
+</body>
+</html>
