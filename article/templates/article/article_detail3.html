@@ -1,0 +1,12 @@
+<h1>{{ article.title }}</h1>
+<p>{{ article.content }}</p>
+<p>Author: {{ article.author }}</p>
+
+<h2>Related Articles</h2>
+<ul>
+    {% for related in related_articles %}
+        <li>{{ related.title }}</li>
+    {% empty %}
+        <li>No related articles.</li>
+    {% endfor %}
+</ul>

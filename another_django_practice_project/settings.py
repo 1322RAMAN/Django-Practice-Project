@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # 'allauth.account',
     # 'allauth.socialaccount',
     # 'allauth.socialaccount.providers.google',  # Example for Google OAuth
+    'rest_framework',   # For RESTful APIs
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'allauth.account.middleware.AccountMiddleware',  # For Using Django-Allauth (OAuth)
+    'article.custom_middlewares.CustomHeaderMiddleware',    # All responses now include the X-Custom-Header.
+    'article.custom_middlewares.LogRequestMethodMiddleware',    # A middleware that logs the request method.
+    'article.custom_middlewares.CacheControlMiddleware',    # A middleware that adds Cache-Control headers.
+    'article.custom_middlewares.ExceptionLoggingMiddleware',    # A middleware to log exceptions and return a custom error response.
+    'article.custom_middlewares.ViewLoggingMiddleware',    # Log the name of the view being accessed.
+    'article.custom_middlewares.TemplateVariableMiddleware',    # Add a variable to the template context.
 ]
 
 ROOT_URLCONF = 'another_django_practice_project.urls'
@@ -185,3 +192,17 @@ AUTHENTICATION_BACKENDS = [
 # # Social Account settings
 # SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '<Your Google Client ID>'
 # SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '<Your Google Client Secret>'
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
+#     ],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+# }
+
+
+# This allows you to access the CSRF token in Postman.
+CSRF_COOKIE_HTTPONLY = False  # Set to False to allow JavaScript to read the CSRF cookie

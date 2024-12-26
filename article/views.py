@@ -1,12 +1,30 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
 from django.db.models import Count, Max, Min, Avg
+from django.views import View
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import ArticleModelSerializer
+from .custom_serializers import ArticleCustomSerializer
 from .forms import ArticleForm
 from .models import Article
 
 
+# Function-based views (FBV)
 def home(request):
     return render(request, 'article/home.html', {'name': 'Django User'})
+
+
+def thankyou(request):
+    return render(request, 'article/thank_you.html')
+
+
+# Class-based views (CBV)
+class HomeView(View):
+    def get(self, request):
+        return HttpResponse("Welcome to the homepage (CBV)!")
 
 
 def create_article(request):
@@ -91,3 +109,44 @@ def filtered_articles(request):
     articles = Article.objects.filter(title__icontains=search_query)
     print('-------- articles --------', articles)
     return render(request, 'article/article_detail.html', {'articles': articles})
+
+
+@api_view(['GET'])
+def api_articles(request):
+    articles = Article.objects.all()
+    serializer = ArticleModelSerializer(articles, many=True)
+    return Response(serializer.data)
+
+
+class ArticleModelAPIView(APIView):
+    def get(self, request):
+        """Retrieve all articles."""
+        articles = Article.objects.all()
+        serializer = ArticleModelSerializer(articles, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """Create a new article."""
+        serializer = ArticleModelSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ArticleCustomAPIView(APIView):
+    def get(self, request):
+        """Retrieve all articles."""
+        articles = Article.objects.all()
+        serializer = ArticleCustomSerializer()
+        serialized_data = [serializer.to_representation(article) for article in articles]
+        return Response(serialized_data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """Create a new article."""
+        print(request.data)  # Debugging: Log incoming data
+        serializer = ArticleCustomSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            article = serializer.save()
+            return Response(serializer.to_representation(article), status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -27,6 +27,9 @@ urlpatterns = [
     path('', view=home, name='home'),  # Root URL for the site
     path('user/', include('user.urls')),
     path('article/', include('article.urls')),
+    path('generic-article/', include('article.generic_class_based_urls')),
+    path('ccbv/', include('article.customized_cbv_urls')),
+    path('bcbv/', include('article.basic_class_based_urls')),
     path('blog/', include('blog.urls')),
     path('register/', view=register_user, name='register_user'),
     path('login/', view=user_login, name='user_login'),

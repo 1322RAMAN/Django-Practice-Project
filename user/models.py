@@ -2,12 +2,12 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.db import models
 
 
-### AbstractBaseUser ###
+# AbstractBaseUser ###
 # Provides the core implementation for a user model:
 # Includes fields like password, last_login, etc.
 # Does not include fields like username, email, or is_active, which you define in CustomUser.
 
-### PermissionsMixin ###
+# PermissionsMixin ###
 # Adds fields and methods for handling user permissions:
 # is_superuser: Indicates if the user is a superuser.
 # groups and user_permissions: Allow assigning permissions to users.
@@ -47,7 +47,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         """Returns the user's email as its string representation."""
-        return self.email
+        return f"{self.first_name} {self.last_name} ({self.email})"
 
     class Meta:
         """ You can also define custom permissions in your CustomUser or other models using the Meta class. """

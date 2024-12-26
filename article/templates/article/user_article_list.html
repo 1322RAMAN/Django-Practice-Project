@@ -1,0 +1,10 @@
+<h1>Your Articles</h1>
+<p>{{ extra_message }}</p>
+{% if extra_variable %}
+    <P>{{ extra_variable }}</P>
+{% endif %}
+<ul>
+    {% for article in articles %}
+        <li>{{ article.title }} - {{ article.pub_date }}</li>
+    {% endfor %}
+</ul>
