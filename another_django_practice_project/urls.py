@@ -19,11 +19,14 @@ from django.urls import path, include
 from .default_provided_user_views import (
     home, register_user, user_login,
     create_superuser, welcome, get_user_details,
-    contact_view, success, logout_user, make_superuser
+    contact_view, success, logout_user, make_superuser,
+    test_task, send_email_view, send_email_view2
     )
+from .external_api_integrations import weather_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),  # Includes allauth URLs
     path('', view=home, name='home'),  # Root URL for the site
     path('user/', include('user.urls')),
     path('article/', include('article.urls')),
@@ -39,6 +42,9 @@ urlpatterns = [
     path('contact/', view=contact_view, name='contact_page'),
     path('success/', view=success, name='success_page'),
     path('logout_user/', view=logout_user, name='logout_user'),
-    path('make_superuser/<str:username>/', view=make_superuser, name='make_superuser'),
-
+    path('make_superuser/<int:id>/', view=make_superuser, name='make_superuser'),
+    path('weather_view/', view=weather_view, name='weather_view'),
+    path('test_celery_task/', view=test_task, name='test_celery_task'),
+    path('send_sendgrid_email/', view=send_email_view, name='send_sendgrid_email'),
+    path('send_sendgrid_email2/', view=send_email_view2, name='send_sendgrid_email2'),
 ]

@@ -132,21 +132,3 @@ class ArticleModelAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class ArticleCustomAPIView(APIView):
-    def get(self, request):
-        """Retrieve all articles."""
-        articles = Article.objects.all()
-        serializer = ArticleCustomSerializer()
-        serialized_data = [serializer.to_representation(article) for article in articles]
-        return Response(serialized_data, status=status.HTTP_200_OK)
-
-    def post(self, request):
-        """Create a new article."""
-        print(request.data)  # Debugging: Log incoming data
-        serializer = ArticleCustomSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            article = serializer.save()
-            return Response(serializer.to_representation(article), status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

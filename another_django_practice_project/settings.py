@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+# import os
 import pymysql
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-9v#h6(mr#z!!pv!&bp%h_o86blmqo))uf*t-rr9zb^3t1v@0#9'
+SECRET_KEY = config("SECRET_KEY", default="your_default_secret_key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="").split(",")
 
 
 # Application definition
@@ -43,10 +46,11 @@ INSTALLED_APPS = [
     'article',
     'blog',
     # For Using Django-Allauth (OAuth)
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',  # Example for Google OAuth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',  # Example for Google OAuth
     'rest_framework',   # For RESTful APIs
 ]
 
@@ -58,7 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware',  # For Using Django-Allauth (OAuth)
+    'allauth.account.middleware.AccountMiddleware',  # For Using Django-Allauth (OAuth)
     'article.custom_middlewares.CustomHeaderMiddleware',    # All responses now include the X-Custom-Header.
     'article.custom_middlewares.LogRequestMethodMiddleware',    # A middleware that logs the request method.
     'article.custom_middlewares.CacheControlMiddleware',    # A middleware that adds Cache-Control headers.
@@ -104,9 +108,9 @@ pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'another_django_practice_project',
-        'USER': 'root',
-        'PASSWORD': 'password',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
         'HOST': 'localhost',  # Or the MySQL server's address
         'PORT': '3306',       # Default MySQL port
         'OPTIONS': {
@@ -159,14 +163,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Configuration for sending emails
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP provider
+# EMAIL_PORT = 587  # Port for TLS
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'ramandhiman1322@gmail.com'
+# EMAIL_HOST_PASSWORD = 'Raman@80539'
+# EMAIL_TIMEOUT = 5  # Optional: Set a timeout for SMTP connections
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Or your SMTP provider
-EMAIL_PORT = 587  # Port for TLS
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ramandhiman1322@gmail.com'
-EMAIL_HOST_PASSWORD = 'Raman@80539'
-EMAIL_TIMEOUT = 5  # Optional: Set a timeout for SMTP connections
+DEFAULT_FROM_EMAIL = 'ramandhiman1322@gmail.com'
 
 
 # MESSAGE_STORAGE configuration
@@ -179,19 +186,29 @@ APPEND_SLASH = True   # If you want Django to automatically append slashes to UR
 # For Using a Custom User Model
 AUTH_USER_MODEL = 'user.CustomUser'
 
+ACCOUNT_EMAIL_REQUIRED = True   # Ensures that the email field is mandatory for user signup and login.
+ACCOUNT_USERNAME_REQUIRED = False   # Disables the username field since you are using email as the primary identifier.
+ACCOUNT_AUTHENTICATION_METHOD = 'email'   # Configures Django Allauth to use email for authentication instead of a username.
+
+# Set the ACCOUNT_USER_MODEL_USERNAME_FIELD to None since your CustomUser model does not use a username field.
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# Allauth uses the user_display function to render a user's display name.
+# You can override this function by adding a callable that specifies how the user should be displayed
+ACCOUNT_USER_DISPLAY = lambda user: f"{user.first_name} {user.last_name} ({user.email})"
+
 # Add your custom backend in settings.py for Using an Alternative Model for Authentication
 AUTHENTICATION_BACKENDS = [
     'user.backends.CustomAuthBackend',  # Custom backend
     'django.contrib.auth.backends.ModelBackend',  # Default backend
-    # 'allauth.account.auth_backends.AuthenticationBackend',  #for user authentication using OAuth
+    'allauth.account.auth_backends.AuthenticationBackend',  # for user authentication using OAuth
 ]
 
-# # Add this to define the site ID for your app
-# SITE_ID = 1  # Make sure this is set correctly
+# Add this to define the site ID for your app
+SITE_ID = 1  # Make sure this is set correctly
 
 # # Social Account settings
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '<Your Google Client ID>'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '<Your Google Client Secret>'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config("GOOGLE_CLIENT_ID")  # <Your Google Client ID>
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config("GOOGLE_CLIENT_SECRET")    # <Your Google Client Secret>
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -206,3 +223,26 @@ AUTHENTICATION_BACKENDS = [
 
 # This allows you to access the CSRF token in Postman.
 CSRF_COOKIE_HTTPONLY = False  # Set to False to allow JavaScript to read the CSRF cookie
+
+# Add the following settings for redirecting users after login/logout:
+LOGIN_REDIRECT_URL = '/welcome'
+LOGOUT_REDIRECT_URL = '/'
+
+# Log Errors: Add CELERY_TASK_ALWAYS_EAGER = True in settings.py during development to run tasks synchronously and debug issues.
+CELERY_TASK_ALWAYS_EAGER = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+
+# For SendGris Email Integration Services
+# # EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+# # SENDGRID_API_KEY = 'your_api_key'
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.sendgrid.net"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = "apikey"  # This is the literal value "apikey".
+# EMAIL_HOST_PASSWORD = config("SENDGRID_API_KEY")  # Replace with your actual API key.
+# DEFAULT_FROM_EMAIL = "ramandhiman1322@gmail.com"  # Replace with your email.

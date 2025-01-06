@@ -40,7 +40,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
 
-    objects = CustomUserManager()   # Links the model to the custom manager for user creation. e.g,( CustomUser.objects.create_superuser(email="admin@example.com", password="adminpassword") )
+    # Links the model to the custom manager for user creation.
+    # e.g,( CustomUser.objects.create_superuser(email="admin@example.com", password="adminpassword") )
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'    # Specifies email as the unique identifier for authentication instead of the default username.
     REQUIRED_FIELDS = []    # Specifies fields required when creating a superuser using createsuperuser. Here, only email is mandatory.

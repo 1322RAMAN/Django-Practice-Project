@@ -9,7 +9,8 @@ from .customized_cbv_views import (
     ArticleUpdateView,
     ArticleDeleteView,
     ContactAuthorView,
-    PaginatedArticleListView
+    PaginatedArticleListView,
+    HomeRedirectView
 )
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     path('article_delete/<int:pk>/', ArticleDeleteView.as_view(), name='custom_article_delete'),
     path('articles/<int:pk>/contact/', ContactAuthorView.as_view(), name='contact_author'),
     path('paginated_article_list/', PaginatedArticleListView.as_view(), name='paginated_article_list'),
+    path('home_redirect_view/', HomeRedirectView.as_view(), name='home_redirect_view'),
 ]
