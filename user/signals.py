@@ -19,7 +19,7 @@ def send_welcome_email(sender, instance, created, **kwargs):
         send_mail(
             subject="Welcome to Our Platform",
             message=f"Hi {instance.first_name} {instance.last_name}, welcome to our platform!",
-            from_email="admin@example.com",
+            from_email="ramandhiman1322@gmail.com",
             recipient_list=[instance.email],
             fail_silently=False,
         )
@@ -31,5 +31,5 @@ def send_welcome_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def send_welcome_email2(sender, instance, created, **kwargs):
     if created:
-        send_welcome_email_task.delay(instance.username, instance.email)
-        logger.info(f"New user created: {instance.username} ({instance.email})")
+        send_welcome_email_task.delay(instance.first_name, instance.email)
+        logger.info(f"New user created: {instance.first_name} {instance.last_name} ({instance.email})")
