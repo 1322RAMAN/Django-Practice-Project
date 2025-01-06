@@ -192,9 +192,15 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'   # Configures Django Allauth to use ema
 
 # Set the ACCOUNT_USER_MODEL_USERNAME_FIELD to None since your CustomUser model does not use a username field.
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+
 # Allauth uses the user_display function to render a user's display name.
 # You can override this function by adding a callable that specifies how the user should be displayed
-ACCOUNT_USER_DISPLAY = lambda user: f"{user.first_name} {user.last_name} ({user.email})"
+def account_user_display(user):
+    return f"{user.first_name} {user.last_name} ({user.email})"
+
+
+ACCOUNT_USER_DISPLAY = account_user_display
 
 # Add your custom backend in settings.py for Using an Alternative Model for Authentication
 AUTHENTICATION_BACKENDS = [
