@@ -7,7 +7,7 @@ from django.http import HttpResponseForbidden  # Import HttpResponseForbidden fo
 from django.views.generic.edit import FormView
 from .forms import ContactForm, ContactAuthorForm
 # RedirectView
-# from django.views.generic import RedirectView
+from django.views.generic import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin  # Ensures that a view is only accessible to authenticated users.
 from django.contrib.auth.mixins import PermissionRequiredMixin  # Ensures that a view is only accessible to users with specific permissions.
 from .mixins import LoggingMixin  # Custom mixin for logging
@@ -151,8 +151,10 @@ class ContactFormView(FormView):
         return super().form_valid(form)
 
 
+# Use Case: Handle forms with custom logic.
 class ContactAuthorView(FormView):
-    template_name = 'articles/contact_author.html'
+    """Handles custom forms not tied to a model."""
+    template_name = 'article/contact_author.html'
     form_class = ContactAuthorForm
     success_url = reverse_lazy('custom_article_list')
 
@@ -164,5 +166,8 @@ class ContactAuthorView(FormView):
         print(f"Message to {article.author}: {message}")
         return super().form_valid(form)
 
-# class HomeRedirectView(RedirectView):
-#     url = '/home/'
+
+# Redirects to a specified URL.
+class HomeRedirectView(RedirectView):
+    """Use Case: Simple redirection without logic."""
+    url = '/home/'

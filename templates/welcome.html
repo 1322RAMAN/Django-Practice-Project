@@ -1,16 +1,16 @@
 <!-- welcome.html -->
 
 {% for message in messages %}
-<p style="{% if 'success' in message.tags %}color: green;{% elif 'error' in message.tags %}color: red;{% else %}color: black;{% endif %}">
-    {{ message }}
-</p>
+    <p class="{% if 'success' in message.tags %}success{% elif 'error' in message.tags %}error{% else %}default{% endif %}">
+        {{ message }}
+    </p>
 {% endfor %}
 
-<h1>Welcome, {{ user.username }}</h1>
+<h1>Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
 
 <!-- Check if the user is a superuser -->
-{% if user.is_superuser %}
-    <a href="{% url 'make_superuser' user.username %}">
+{% if not user.is_superuser %}
+    <a href="{% url 'make_superuser' user.id %}">
         <button>Create Superuser</button>
     </a>
 {% endif %}

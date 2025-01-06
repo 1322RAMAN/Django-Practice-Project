@@ -1,3 +1,4 @@
+# Middleware in Django is a way to process requests and responses globally.
 import logging
 
 logger = logging.getLogger(__name__)

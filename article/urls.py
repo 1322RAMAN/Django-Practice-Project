@@ -4,7 +4,7 @@ from .views import (
     get_excluded_articles, get_ordered_articles, get_field_lookups,
     get_aggregations_articles, filtered_articles, thankyou
 )
-from .views import ArticleCustomAPIView, ArticleModelAPIView, api_articles
+from .views import ArticleModelAPIView, api_articles
 
 
 urlpatterns = [
@@ -18,7 +18,6 @@ urlpatterns = [
     path('get_aggregations_articles/', get_aggregations_articles, name='get_aggregations_articles'),
     path('filtered_articles/', filtered_articles, name='filtered_articles'),
     path('api/articles/', api_articles, name='api_articles'),
-    path('api/custom-articles/', ArticleCustomAPIView.as_view(), name='custom-article-api'),
     path('api/model-articles/', ArticleModelAPIView.as_view(), name='model-article-api'),
     path('thank-you/', thankyou, name='thank-you'),
 ]
