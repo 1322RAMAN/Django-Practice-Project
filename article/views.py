@@ -145,7 +145,6 @@ def query_optimization(request):
         print('Efficient Query', article.author.first_name)
 
     articles = Article.objects.only('title', 'content')
-    print('------- articles -------', articles)
     for article in articles:
         print('Fetch only required fields - ', article.title)
     return HttpResponse("Query Optimization !")
