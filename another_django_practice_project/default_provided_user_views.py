@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse
 from django.core.mail import send_mail
-from .tasks import add, send_email_task
+# from .tasks import add, send_email_task
+from user.tasks import send_welcome_email_task
 
 
 def home(request):
@@ -133,9 +134,9 @@ def make_superuser(request, username):
         return redirect('welcome')  # Handle the error as needed
 
 
-def test_task(request):
-    result = add.delay(10, 20)  # Asynchronous execution
-    return JsonResponse({"task_id": result.id})
+# def test_task(request):
+#     result = add.delay(10, 20)  # Asynchronous execution
+#     return JsonResponse({"task_id": result.id})
 
 
 def send_email_view(request):
@@ -155,6 +156,7 @@ def send_email_view2(request):
     recipient_list = ["1322noobmaster@gmail.com"]
 
     # Call the Celery task to send the email
-    send_email_task.delay(subject, message, from_email, recipient_list)
+    # send_email_task.delay(subject, message, from_email, recipient_list)
+    send_welcome_email_task.delay(subject, message, from_email, recipient_list)
 
     return JsonResponse({"message": "Email task initiated successfully!"})
