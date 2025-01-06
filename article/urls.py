@@ -3,7 +3,7 @@ from .views import (
     create_article, get_articles, get_article, get_filterd_articles,
     get_excluded_articles, get_ordered_articles, get_field_lookups,
     get_aggregations_articles, filtered_articles, thankyou,
-    query_optimization
+    query_optimization, article_list
 )
 from .views import ArticleModelAPIView, api_articles
 
@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/model-articles/', ArticleModelAPIView.as_view(), name='model-article-api'),
     path('thank-you/', thankyou, name='thank-you'),
     path('query_optimization/', query_optimization, name='query_optimization'),
+    path('article_list/', article_list, name='article_list'),
 ]

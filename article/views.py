@@ -6,8 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import ArticleModelSerializer
-# from .custom_serializers import ArticleCustomSerializer
+from .serializers import ArticleModelSerializer, ArticleSerializer
 from .forms import ArticleForm
 from .models import Article
 
@@ -115,6 +114,13 @@ def filtered_articles(request):
 def api_articles(request):
     articles = Article.objects.all()
     serializer = ArticleModelSerializer(articles, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
+def article_list(request):
+    articles = Article.objects.all()
+    serializer = ArticleSerializer(articles, many=True)
     return Response(serializer.data)
 
 
