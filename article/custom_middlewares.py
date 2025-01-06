@@ -87,10 +87,15 @@ class TemplateVariableMiddleware:
         self.get_response = get_response
 
     def process_template_response(self, request, response):
-        response.context_data['extra_variable'] = 'Extra Context Data'
+        # Ensure the response has `context_data` and it is not None
+        if hasattr(response, 'context_data') and response.context_data is not None:
+            response.context_data['extra_variable'] = 'Extra Context Data'
         return response
 
     def __call__(self, request):
         # This method ensures the middleware is callable
         response = self.get_response(request)
+        # Call process_template_response for TemplateResponse objects
+        if hasattr(response, 'render') and callable(response.render):
+            response = self.process_template_response(request, response)
         return response

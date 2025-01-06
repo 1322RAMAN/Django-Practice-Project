@@ -5,6 +5,7 @@ from .views import (
     check_superuser, is_staff_member, check_staff_member_required,
     staff_only_view, checking_superuser_decorator, contact
     )
+from .testing_authentications import protected_view, secured_view
 
 urlpatterns = [
     path('register/', register, name='register'),
@@ -23,4 +24,6 @@ urlpatterns = [
     path('staff_only_view/', staff_only_view, name='staff_only_view'),
     path('checking_superuser_decorator/', checking_superuser_decorator, name='checking_superuser_decorator'),
     path('contact/', contact, name='contact'),
+    path('protected_view/', protected_view, name='protected_view'),
+    path('secured_view/', secured_view, name='secured_view'),
 ]

@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import ArticleModelSerializer
-from .custom_serializers import ArticleCustomSerializer
+# from .custom_serializers import ArticleCustomSerializer
 from .forms import ArticleForm
 from .models import Article
 
@@ -132,3 +132,20 @@ class ArticleModelAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def query_optimization(request):
+    # Inefficient Query
+    articles = Article.objects.all()
+    for article in articles:
+        print('Inefficient Query', article.author.first_name)
+    # Efficient Query
+    articles = Article.objects.select_related('author').all()
+    for article in articles:
+        print('Efficient Query', article.author.first_name)
+
+    articles = Article.objects.only('title', 'content')
+    print('------- articles -------', articles)
+    for article in articles:
+        print('Fetch only required fields - ', article.title)
+    return HttpResponse("Query Optimization !")

@@ -2,7 +2,8 @@ from django.urls import path
 from .views import (
     create_article, get_articles, get_article, get_filterd_articles,
     get_excluded_articles, get_ordered_articles, get_field_lookups,
-    get_aggregations_articles, filtered_articles, thankyou
+    get_aggregations_articles, filtered_articles, thankyou,
+    query_optimization
 )
 from .views import ArticleModelAPIView, api_articles
 
@@ -20,4 +21,5 @@ urlpatterns = [
     path('api/articles/', api_articles, name='api_articles'),
     path('api/model-articles/', ArticleModelAPIView.as_view(), name='model-article-api'),
     path('thank-you/', thankyou, name='thank-you'),
+    path('query_optimization/', query_optimization, name='query_optimization'),
 ]
