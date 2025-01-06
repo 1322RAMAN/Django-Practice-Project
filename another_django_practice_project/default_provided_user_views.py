@@ -11,7 +11,7 @@ from user.tasks import send_welcome_email_task
 
 
 def home(request):
-    return HttpResponse("Welcome to the Home Page!")
+    return render(request, 'home.html', {'name': request.user})
 
 
 def register_user(request):
